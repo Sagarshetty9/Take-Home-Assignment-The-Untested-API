@@ -1,0 +1,69 @@
+const taskService = require("../src/services/taskService");
+
+//Get all tasks///
+describe("getAll", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1: return an empty array when there are no tasks", () => {
+    const tasks = taskService.getAll();
+
+    expect(tasks).toEqual([]);
+  });
+
+  test("Test 2: returns all created tasks", () => {
+    taskService.create({ title: "Task 1" });
+    taskService.create({ title: "Task 2" });
+
+    const tasks = taskService.getAll();
+
+    expect(tasks).toHaveLength(2);
+  });
+});
+
+//Create task ///
+describe("Create task with all fields", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1: Create a task with Title and default values", () => {
+    const task = taskService.create({ title: "Task 1" });
+
+    expect(task.title).toBe("Task 1");
+    expect(task.id).toBeDefined();
+  });
+
+  test("Test 2: Create a task with custom values", () => {
+    const task = taskService.create({
+      title: "Task 1",
+      description: "Good stuff",
+      status: "in_progress",
+      priority: "low",
+    });
+
+    expect(task.title).toBe("Task 1");
+    expect(task.description).toBe("Good stuff");
+    expect(task.status).toBe("in_progress");
+    expect(task.priority).toBe("low");
+    expect(task.id).toBeDefined();
+  });
+});
+
+
+//Find By id ////
+describe("Find by ID", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Find task by id", () => { 
+    
+   })
+  
+
+
+
+
+});
