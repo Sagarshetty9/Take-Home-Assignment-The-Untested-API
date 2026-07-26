@@ -68,13 +68,13 @@ const remove = (id) => {
   return true;
 };
 
+//Priority error was here
 const completeTask = (id) => {
   const task = findById(id);
   if (!task) return null;
 
   const updated = {
     ...task,
-    priority: "medium",
     status: "done",
     completedAt: new Date().toISOString(),
   };

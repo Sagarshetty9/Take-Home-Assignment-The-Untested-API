@@ -71,7 +71,6 @@ describe("Find by ID", () => {
   });
 });
 
-
 //Get By Status///
 describe("getByStatus", () => {
   beforeEach(() => {
@@ -91,14 +90,13 @@ describe("getByStatus", () => {
   });
 
   test("Test 2:returns an empty array when no tasks match", () => {
-  taskService.create({ title: "Task 1", status: "done" });
+    taskService.create({ title: "Task 1", status: "done" });
 
-  const foundTasks = taskService.getByStatus("todo");
+    const foundTasks = taskService.getByStatus("todo");
 
-  expect(foundTasks).toEqual([]);
+    expect(foundTasks).toEqual([]);
+  });
 });
-});
-
 
 //Get paginated///
 describe("getPaginated", () => {
@@ -152,7 +150,6 @@ describe("getStats", () => {
   });
 });
 
-
 //Update task
 describe("update", () => {
   beforeEach(() => {
@@ -172,7 +169,7 @@ describe("update", () => {
 
     expect(updatedTask.title).toBe("Updated Task");
     expect(updatedTask.priority).toBe("high");
-    expect(updatedTask.id).toBe(task.id); // ID should not change
+    expect(updatedTask.id).toBe(task.id);
   });
 
   test("Test 2: returns null for a non-existent task", () => {
@@ -184,8 +181,53 @@ describe("update", () => {
   });
 });
 
+//Remove tasks :(
+describe("remove", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
 
+  test("Test 1: should remove the task from the array", () => {
+    const task = taskService.create({ title: "Feeling cute, might delete rn" });
+    const removed = taskService.remove(task.id);
 
+    expect(removed).toBe(true);
+    expect(taskService.findById(task.id)).toBeUndefined();
+  });
 
-// remove()
-//  completeTask()
+  test("Test 2: returns false for a non-existent task", () => {
+    const removed = taskService.remove("invalid-id");
+
+    expect(removed).toBe(false);
+  });
+});
+
+//Completed task///
+
+describe("completeTask", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1: marks a task as completed", () => {
+    const task = taskService.create({
+      title: "Task 1",
+      status: "todo",
+      priority: "high"
+    });
+
+    const completedTask = taskService.completeTask(task.id);
+
+    expect(completedTask.status).toBe("done");
+    expect(completedTask.completedAt).toBeDefined();
+    expect(completedTask.priority).toBe("high");
+  });
+
+  test("Test 2: returns null for a non-existent task", () => {
+    const completedTask = taskService.completeTask("invalid-id");
+
+    expect(completedTask).toBeNull();
+  });
+
+});
+
