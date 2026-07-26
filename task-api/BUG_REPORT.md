@@ -59,3 +59,18 @@ priority: "medium",
 - The function now only updates:
   - `status`
   - `completedAt`
+
+  ### What I'd test next
+
+If I had more time, I would add more edge case and integration tests, particularly around request validation, invalid query parameters, and combinations of filtering and pagination. I would also test concurrent requests and additional failure scenarios.
+
+### Anything that surprised me
+
+The biggest surprise was that writing tests exposed bugs that weren't obvious during a manual code review. The pagination offset issue and the task priority being reset on completion were both discovered through testing rather than by simply reading the code.
+
+### Questions before shipping to production
+
+- Should completed tasks be allowed to be reassigned?
+- Should fields such as `id` and `createdAt` be immutable during updates?
+- Should filtering and pagination work together (e.g. `GET /tasks?status=todo&page=2&limit=10`)?
+- Are there any authentication or authorization requirements planned for the API?
