@@ -51,19 +51,55 @@ describe("Create task with all fields", () => {
   });
 });
 
-
 //Find By id ////
 describe("Find by ID", () => {
   beforeEach(() => {
     taskService._reset();
   });
 
-  test("Find task by id", () => { 
-    
-   })
-  
+  test("Test 1 : returns task matched with req id", () => {
+    const task = taskService.create({ title: "Task 1" });
+    const foundTask = taskService.findById(task.id);
 
+    expect(foundTask).toEqual(task);
+  });
 
+  test("Test 2 : returns undefined for unknown ID", () => {
+    const task = taskService.findById("invalidId");
 
-
+    expect(task).toBeUndefined();
+  });
 });
+
+
+//Get By Status///
+describe("getByStatus", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1: returns tasks with the requested status", () => {
+    const task = taskService.create({
+      title: "Task 1",
+      status: "todo",
+    });
+
+    const foundTasks = taskService.getByStatus("todo");
+
+    expect(foundTasks).toHaveLength(1);
+    expect(foundTasks[0]).toEqual(task);
+  });
+
+  test("Test 2:returns an empty array when no tasks match", () => {
+  taskService.create({ title: "Task 1", status: "done" });
+
+  const foundTasks = taskService.getByStatus("todo");
+
+  expect(foundTasks).toEqual([]);
+});
+});
+
+
+
+
+
