@@ -23,7 +23,7 @@ describe("getAll", () => {
 });
 
 //Create task ///
-describe("Create task with all fields", () => {
+describe("create", () => {
   beforeEach(() => {
     taskService._reset();
   });
@@ -52,7 +52,7 @@ describe("Create task with all fields", () => {
 });
 
 //Find By id ////
-describe("Find by ID", () => {
+describe("findById", () => {
   beforeEach(() => {
     taskService._reset();
   });
