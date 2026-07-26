@@ -8,8 +8,7 @@ const findById = (id) => tasks.find((t) => t.id === id);
 
 const getByStatus = (status) => tasks.filter((t) => t.status.includes(status));
 
-
-///Pagniation error was here 
+///Pagniation error was here
 const getPaginated = (page, limit) => {
   const offset = (page - 1) * limit;
   return tasks.slice(offset, offset + limit);
@@ -44,6 +43,7 @@ const create = ({
     status,
     priority,
     dueDate,
+    assignee: null,
     completedAt: null,
     createdAt: new Date().toISOString(),
   };
@@ -88,6 +88,21 @@ const _reset = () => {
   tasks = [];
 };
 
+
+//Feature created and exported ///
+const assign = (id, assignee) => {
+  const index = tasks.findIndex((t) => t.id === id);
+
+  if (index === -1) return null;
+
+  tasks[index] = {
+    ...tasks[index],
+    assignee,
+  };
+
+  return tasks[index];
+};
+
 module.exports = {
   getAll,
   findById,
@@ -99,4 +114,5 @@ module.exports = {
   remove,
   completeTask,
   _reset,
+  assign
 };

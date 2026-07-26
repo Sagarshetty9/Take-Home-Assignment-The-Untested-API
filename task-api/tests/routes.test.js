@@ -104,3 +104,49 @@ describe("GET /tasks/stats", () => {
     expect(res.body.todo).toBe(1);
   });
 });
+
+//Feature test
+describe("PATCH /tasks/:id/assign", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("assigns a task", async () => {
+    const task = taskService.create({
+      title: "Task 1",
+    });
+
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({
+        assignee: "Sagar",
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.assignee).toBe("Sagar");
+  });
+
+  test("returns 404 when task does not exist", async () => {
+    const res = await request(app)
+      .patch("/tasks/invalid-id/assign")
+      .send({
+        assignee: "Sagar",
+      });
+
+    expect(res.statusCode).toBe(404);
+  });
+
+  test("returns 400 for an empty assignee", async () => {
+    const task = taskService.create({
+      title: "Task 1",
+    });
+
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({
+        assignee: "",
+      });
+
+    expect(res.statusCode).toBe(400);
+  });
+});
