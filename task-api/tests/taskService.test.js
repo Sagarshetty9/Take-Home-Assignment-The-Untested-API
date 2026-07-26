@@ -106,7 +106,7 @@ describe("getPaginated", () => {
     taskService._reset();
   });
 
-  test("returns the first page with 10 tasks", () => {
+  test("Test 1: returns the first page with 10 tasks", () => {
     for (let i = 1; i <= 15; i++) {
       taskService.create({ title: `Task ${i}` });
     }
@@ -119,10 +119,73 @@ describe("getPaginated", () => {
   });
 });
 
+//Get stats///
+describe("getStats", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1: returns correct task counts by status", () => {
+    taskService.create({ title: "Task 1", status: "todo" });
+    taskService.create({ title: "Task 2", status: "todo" });
+    taskService.create({ title: "Task 3", status: "in_progress" });
+    taskService.create({ title: "Task 4", status: "done" });
+
+    const stats = taskService.getStats();
+
+    expect(stats.todo).toBe(2);
+    expect(stats.in_progress).toBe(1);
+    expect(stats.done).toBe(1);
+    expect(stats.overdue).toBe(0);
+  });
+
+  test("Test 2: counts overdue tasks correctly", () => {
+    taskService.create({
+      title: "Overdue Task",
+      dueDate: "2025-01-01T00:00:00.000Z",
+      status: "todo",
+    });
+
+    const stats = taskService.getStats();
+
+    expect(stats.overdue).toBe(1);
+  });
+});
 
 
-// getPaginated()
-// ☐ getStats()
-// ☐ update()
-// ☐ remove()
-// ☐ completeTask()
+//Update task
+describe("update", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("Test 1 :updates an existing task", () => {
+    const task = taskService.create({
+      title: "Task 1",
+      priority: "low",
+    });
+
+    const updatedTask = taskService.update(task.id, {
+      title: "Updated Task",
+      priority: "high",
+    });
+
+    expect(updatedTask.title).toBe("Updated Task");
+    expect(updatedTask.priority).toBe("high");
+    expect(updatedTask.id).toBe(task.id); // ID should not change
+  });
+
+  test("Test 2: returns null for a non-existent task", () => {
+    const updatedTask = taskService.update("invalid-id", {
+      title: "Updated Task",
+    });
+
+    expect(updatedTask).toBeNull();
+  });
+});
+
+
+
+
+// remove()
+//  completeTask()
