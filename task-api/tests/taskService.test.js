@@ -100,6 +100,29 @@ describe("getByStatus", () => {
 });
 
 
+//Get paginated///
+describe("getPaginated", () => {
+  beforeEach(() => {
+    taskService._reset();
+  });
+
+  test("returns the first page with 10 tasks", () => {
+    for (let i = 1; i <= 15; i++) {
+      taskService.create({ title: `Task ${i}` });
+    }
+
+    const tasks = taskService.getPaginated(1, 10);
+
+    expect(tasks).toHaveLength(10);
+    expect(tasks[0].title).toBe("Task 1");
+    expect(tasks[9].title).toBe("Task 10");
+  });
+});
 
 
 
+// getPaginated()
+// ☐ getStats()
+// ☐ update()
+// ☐ remove()
+// ☐ completeTask()
